@@ -1,0 +1,46 @@
+FROM mcr.microsoft.com/devcontainers/python:1-3.12
+
+# Place the certificate into the certificate directory
+# The extra blank line at the end is required!
+COPY <<EOF /usr/local/share/ca-certificates/StantecOCSPRoot.crt
+-----BEGIN CERTIFICATE-----
+MIIFGTCCAwGgAwIBAgIQMKA0EekELohPBjG0f9LYdjANBgkqhkiG9w0BAQsFADAf
+MR0wGwYDVQQDExRTdGFudGVjIE9DU1AgUm9vdCBDQTAeFw0yMTA5MzAyMDQwMzda
+Fw00MTA5MzAyMDUwMzRaMB8xHTAbBgNVBAMTFFN0YW50ZWMgT0NTUCBSb290IENB
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA45YAym1kvK3jD7aismKq
+dJRsWTIpfA1zDsmoXxiotsA8QtZP2XlY2x93lYXYg0iksJA0XQbEOEZfYWv0L53p
+SiJ+tOcXL6oVeO6Rxo7vnLGD6l74fVRa21oO14J0qHFAE2upUEB+0YCSNyJQTCov
+hBkRU+EsfMgwRn2WlyGqi4FlzLdenUDMviM37RiQ5g+n1kjKu9EARtQGV4QMgapR
+4ff2JWVR/lAHBBrghQOud+VGZyIvNQDLIj2NgA0IYL8dRpLyHpr97X6cVeHmio6O
+NUpG2+afL8RoR+tb3y4Ct04z5HRj9BPFizDMCpWrPMSsS1ZozIcHc03JOIo/7qMk
+UWhaI7Vhri/70YqcteKzjP7/MFp4IvyWo5Qzv9cykfD8/e0cB6Nwa27sgNJQK6aq
+kfhyS2PBaiGRrHZVs6ZEtjrvkLaNJLbY1A1taw7YIM4/SDH5GyH5HBGCVLmnDqfD
+aaoxMpx2iTAxaU1fqRpjc0i4XT4zkS5k3Xp74vGwuF4jUx7D/inIVExPKVHvbl6Z
+rg4TfV74zbm5QmiUO+KQ3i8tlilXLKg+FoR5b8YNPZbpPrTnVt5dzUvbK+wJVeZQ
+r3qJlxVs+CssOZW7bJj2TA7aXZPyWUNwUOvoNDtfEPykM+Ebb3u2a2zo2n48ACTa
+xPwHqzjQp1qFtRiEwwK2VSUCAwEAAaNRME8wCwYDVR0PBAQDAgGGMA8GA1UdEwEB
+/wQFMAMBAf8wHQYDVR0OBBYEFAS+h6IG75qanvbVx/2H5BMaOElrMBAGCSsGAQQB
+gjcVAQQDAgEAMA0GCSqGSIb3DQEBCwUAA4ICAQB2mTcUYL4VJUGYiY5ByxJeZmJb
+Loxi7y2SNSoBqVg6ZvIsD45V/6B3Lhyc9SssFdkgi14rUvwA1JtKGYwLzMGhTPeo
+qWjk14565WArZp29BV/hY6ExqbZdpVYNASLLceb5hKYcn5U3/nW+bsmELewAG5yW
+UpisIdWUWxnRYfgs5t09d1Mdt8YY21xRJ4vkt2wUZ/bUky+LKl5r7aBAGF1isK7C
+kammgdqyZbfTckuSDmyMtl+w070f5bX7QHAabnsgvNay6QT4oYYL6OGBl9Uxq6wu
+6pOzFlwhtLNH1u5Qw0hWO55aA2jSR57CP5am3oL/w3YzQy3s8fuyPCn/ieWPKlgh
+qh1KYzMvu+Lknk5yRIr1er2J//hT5a0YziZ/Nje0Hq5Bg37ZJRv+Br/ivzZKuVvq
+qR5eDo0mL98xaYB/E/0x2OxwwFNDZWDAdY/hre/jULRA9WZuX5oe4d98ymusTCW8
+kuqE4KUCuYNWC0qe4y9QxisyXjukUEEULmddrei4sph21p4uVyETZTzhy5Ocbc6X
+aTxVMa75OYzfMydgg5802YpUV9nd66YN1vnAu2Cy/3VBXNIDTmXtLvinpqXBcGTl
+UwxoezFru7lR7E9xX1/TZ9UTkF3ZBiyzN26x0iwgyQx83YYbS0tylhlhvk+nGgFa
+6NnZjtfLXsZUGX3LEg==
+-----END CERTIFICATE-----
+
+EOF
+
+# Execute the command to update the ca certs
+RUN update-ca-certificates
+
+# Add the cert to the NODE_EXTRA_CA_CERTS environment variable
+ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/StantecOCSPRoot.crt
+
+# Add the cert for UV
+ENV SSL_CERT_FILE=/usr/local/share/ca-certificates/StantecOCSPRoot.crt
